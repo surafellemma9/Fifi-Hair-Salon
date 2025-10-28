@@ -1,13 +1,7 @@
 "use client"
 
 import { services } from '@/components/ServiceCard'
-import type { Metadata } from 'next'
 import { useEffect, useMemo, useState } from 'react'
-
-export const metadata: Metadata = {
-	title: 'Book an Appointment — Fifi Hair Salon',
-	description: 'Reserve your spot for cuts, color, and treatments at Fifi Hair Salon.',
-}
 
 const CALENDLY = process.env.NEXT_PUBLIC_CALENDLY_URL
 

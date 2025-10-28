@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import Section from './Section'
+import SalonSection from './Section'
 
 const imgs = Array.from({ length: 12 }).map((_, i) => `/images/gallery/${String(i + 1).padStart(2, '0')}.jpg`)
 
@@ -33,7 +33,7 @@ export default function Gallery() {
 	}, [open])
 
 	return (
-		<Section id="gallery" eyebrow="Gallery" title="Recent Work" subtitle="A glimpse into styles created by our team.">
+		<SalonSection id="gallery" eyebrow="Gallery" title="Recent Work" subtitle="A glimpse into styles created by our team.">
 			<div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
 				{imgs.map((src, i) => (
 					<div key={src} className="mb-4 break-inside-avoid">
@@ -61,6 +61,6 @@ export default function Gallery() {
 						</div>
 					</div>
 				)}
-		</Section>
+		</SalonSection>
 	)
 }
