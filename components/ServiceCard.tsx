@@ -10,12 +10,14 @@ export type Service = {
 }
 
 export const services: Service[] = [
-	{ slug: 'cut', title: 'Precision Cut', description: 'Tailored cuts for your face shape and lifestyle.', startingAt: '$45', icon: '/images/services/cut.jpg' },
-	{ slug: 'color', title: 'Signature Color', description: 'Gloss, single process, or dimensional color.', startingAt: '$85', icon: '/images/services/color.jpg' },
-	{ slug: 'balayage', title: 'Balayage', description: 'Hand-painted highlights with soft grow-out.', startingAt: '$150', icon: '/images/services/color.jpg' },
-	{ slug: 'treatment', title: 'Deep Treatment', description: 'Repair and nourish for lasting shine.', startingAt: '$65', icon: '/images/services/treatment.jpg' },
-	{ slug: 'style', title: 'Blowout & Style', description: 'Smooth, bounce, and photo-ready finish.', startingAt: '$55', icon: '/images/services/cut.jpg' },
-	{ slug: 'updo', title: 'Event Styling', description: 'Chic updos and special occasion looks.', startingAt: '$95', icon: '/images/services/style.jpg' },
+	{ slug: 'cut', title: 'Natural Hair Cuts', description: 'Precision cuts for natural textures, protective styles, and face-framing layers.', startingAt: '$55', icon: '/images/services/cut.jpg' },
+	{ slug: 'color', title: 'Hair Coloring', description: 'Vibrant colors, highlights, and color corrections for all hair textures.', startingAt: '$95', icon: '/images/services/color.jpg' },
+	{ slug: 'braids', title: 'Protective Braids', description: 'Box braids, cornrows, twists, and knotless braids for healthy hair growth.', startingAt: '$120', icon: '/images/services/braids.jpg' },
+	{ slug: 'treatment', title: 'Deep Conditioning', description: 'Intensive treatments for moisture, strength, and curl definition.', startingAt: '$75', icon: '/images/services/treatment.jpg' },
+	{ slug: 'style', title: 'Blowout & Silk Press', description: 'Smooth, silky press with heat protection and lasting results.', startingAt: '$65', icon: '/images/services/style.jpg' },
+	{ slug: 'updo', title: 'Special Occasion', description: 'Elegant updos, wedding styles, and event-ready looks.', startingAt: '$110', icon: '/images/services/updo.jpg' },
+	{ slug: 'weave', title: 'Hair Extensions', description: 'Sew-in, tape-in, and clip-in extensions for length and volume.', startingAt: '$180', icon: '/images/services/weave.jpg' },
+	{ slug: 'loc', title: 'Loc Maintenance', description: 'Loc retwists, palm rolling, and maintenance for healthy locs.', startingAt: '$85', icon: '/images/services/locs.jpg' },
 ]
 
 export default function ServiceCard({ item }: { item: Service }) {

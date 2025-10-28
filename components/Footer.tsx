@@ -3,7 +3,7 @@ export default function Footer() {
 		<footer className="mt-10">
 			<div className="bg-accent text-white">
 				<div className="container flex flex-col md:flex-row items-center justify-between gap-3 py-5">
-					<p className="font-serif text-lg">Ready for a refresh?</p>
+					<p className="font-serif text-lg">Ready to embrace your natural beauty?</p>
 					<a href="/booking" className="btn-pill bg-white text-accent hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Book Your Appointment</a>
 				</div>
 			</div>

@@ -6,11 +6,11 @@ export default function Hero() {
 			<div className="container max-w-7xl grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 				<div>
 					<h1 id="hero-title" className="font-serif text-5xl md:text-6xl leading-tight tracking-[-0.02em] text-ink">
-						Transform Your Look,
-						<br />Elevate Your Style
+						Embrace Your Natural Beauty,
+						<br />Celebrate Your Crown
 					</h1>
 					<p className="mt-4 text-[17px] md:text-[18px] leading-8 text-muted max-w-prose">
-						Professional haircuts, bespoke coloring, and nourishing treatments—tailored to highlight your unique beauty.
+						Expert care for natural hair, protective styles, and all textures. Where your hair journey begins with confidence and authenticity.
 					</p>
 					<div className="mt-6 flex flex-col sm:flex-row gap-3">
 						<a href="#booking" className="rounded-full px-5 py-2.5 shadow-sm bg-accent hover:bg-accent-strong text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Book Your Appointment</a>

@@ -37,7 +37,8 @@ export default function BookingPage() {
 
 	return (
 		<main className="container py-16">
-			<h1 className="font-serif text-3xl text-ink">Book Your Appointment</h1>
+			<h1 className="font-serif text-3xl text-ink">Book Your Hair Journey</h1>
+			<p className="mt-2 text-muted">Ready to embrace your natural beauty? Let's create something amazing together.</p>
 			{CALENDLY ? (
 				<div className="mt-6">
 					<div className="calendly-inline-widget rounded-2xl ring-1 ring-black/5 shadow-soft" data-url={CALENDLY} style={{ minWidth: '320px', height: 740 }} />

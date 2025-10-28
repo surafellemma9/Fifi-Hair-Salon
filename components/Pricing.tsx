@@ -1,19 +1,21 @@
 import Section from './Section'
 
 const groups = [
-	{ title: 'Cuts', items: [
-		{ name: 'Women’s Cut', price: 'from $75' },
-		{ name: 'Men’s Cut', price: 'from $45' },
-		{ name: 'Blowout', price: 'from $55' },
+	{ title: 'Natural Hair', items: [
+		{ name: 'Natural Hair Cut', price: 'from $55' },
+		{ name: 'Silk Press', price: 'from $65' },
+		{ name: 'Wash & Style', price: 'from $45' },
 	]},
-	{ title: 'Color', items: [
-		{ name: 'Single Process', price: 'from $110' },
-		{ name: 'Partial Highlights', price: 'from $140' },
-		{ name: 'Balayage', price: 'from $220' },
+	{ title: 'Protective Styles', items: [
+		{ name: 'Box Braids', price: 'from $120' },
+		{ name: 'Cornrows', price: 'from $80' },
+		{ name: 'Twists', price: 'from $90' },
+		{ name: 'Loc Retwist', price: 'from $85' },
 	]},
-	{ title: 'Treatments', items: [
-		{ name: 'Deep Conditioning', price: 'from $45' },
-		{ name: 'Keratin', price: 'from $300' },
+	{ title: 'Color & Treatments', items: [
+		{ name: 'Hair Coloring', price: 'from $95' },
+		{ name: 'Deep Conditioning', price: 'from $75' },
+		{ name: 'Hair Extensions', price: 'from $180' },
 	]},
 ]
 

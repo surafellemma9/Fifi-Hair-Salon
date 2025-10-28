@@ -6,7 +6,7 @@ import Section from './Section'
 export default function ContactBlock() {
 	const [sent, setSent] = useState(false)
 	return (
-		<Section id="contact" eyebrow="Contact" title="Visit or Get in Touch" subtitle="We’re located in the heart of the city.">
+		<Section id="contact" eyebrow="Contact" title="Visit or Get in Touch" subtitle="Your trusted salon for natural hair care and protective styles.">
 			<div className="grid md:grid-cols-2 gap-6">
 				<div className="rounded-2xl bg-surface p-6 ring-1 ring-black/5 shadow-soft">
 					<ul className="space-y-3 text-ink/90">

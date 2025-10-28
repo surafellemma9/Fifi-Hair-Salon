@@ -12,10 +12,10 @@ export default function IntroGrid() {
 				<div className="rounded-2xl bg-bg p-6 md:p-8 shadow-[0_8px_24px_rgba(0,0,0,0.06)] grid">
 					<header className="mb-3">
 						<p className="tracking-wide text-xs font-semibold uppercase text-muted">Our Philosophy</p>
-						<h2 id="philo" className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-ink">Blending Creativity With Expertise</h2>
+						<h2 id="philo" className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-ink">Celebrating Natural Beauty</h2>
 					</header>
 					<p className="text-[17px] md:text-[18px] leading-8 text-ink/80">
-						At Fifi Salon, we believe hair is more than just style—it’s confidence. Our expert stylists combine creativity and precision to craft looks that fit your personality and lifestyle.
+						At Fifi Hair Salon, we celebrate the beauty and diversity of black hair. Our expert stylists understand the unique needs of natural hair, protective styles, and all textures. We're here to empower your hair journey with knowledge, care, and authentic beauty.
 					</p>
 					<a href="#booking" className="mt-5 self-start rounded-full px-5 py-2.5 ring-1 ring-accent text-accent hover:bg-accent/5">Reserve Your Spot</a>
 				</div>

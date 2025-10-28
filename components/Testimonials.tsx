@@ -4,9 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import Section from './Section'
 
 const items = [
-	{ quote: 'The best cut I have ever had. My hair finally sits right.', name: 'Amara', stars: 5 },
-	{ quote: 'Color is dimensional and healthy—exactly what I wanted.', name: 'Jenna', stars: 5 },
-	{ quote: 'Lovely team and calming space. Highly recommend.', name: 'Sofia', stars: 4 },
+	{ quote: 'Fifi transformed my natural hair journey! My curls have never looked healthier or more defined. The deep conditioning treatment was everything I needed.', name: 'Keisha', stars: 5 },
+	{ quote: 'Finally found a salon that understands black hair! My box braids lasted 8 weeks and looked amazing the entire time. Worth every penny.', name: 'Aaliyah', stars: 5 },
+	{ quote: 'The silk press was flawless and lasted for weeks. Fifi really knows how to work with different hair textures. My hair felt so soft and manageable.', name: 'Nia', stars: 5 },
+	{ quote: 'I was nervous about coloring my natural hair, but Fifi made me feel so comfortable. The color came out exactly how I envisioned it.', name: 'Zara', stars: 5 },
+	{ quote: 'Best loc maintenance I\'ve ever had! My locs are so neat and healthy. Fifi really understands the loc journey.', name: 'Imani', stars: 5 },
+	{ quote: 'The protective styles here are incredible. My hair grew so much during the 6 weeks I had my twists in. Highly recommend!', name: 'Destiny', stars: 5 },
 ]
 
 export default function Testimonials() {
