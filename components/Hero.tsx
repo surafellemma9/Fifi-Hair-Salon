@@ -18,7 +18,7 @@ export default function Hero() {
 					</div>
 				</div>
 				<div className="relative">
-					<Image src="/images/hero/portrait.jpg" alt="Black woman with beautiful natural hair, professional salon portrait" width={960} height={1200} priority className="aspect-[4/5] rounded-3xl object-cover shadow-lg" />
+					<Image src="/images/hero/hero-portrait.jpg" alt="Black woman with beautiful natural hair being styled with professional blow dryer" width={960} height={1200} priority className="aspect-[4/5] rounded-3xl object-cover shadow-lg" />
 				</div>
 			</div>
 		</section>

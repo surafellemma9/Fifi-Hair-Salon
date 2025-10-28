@@ -4,9 +4,13 @@ export default function IntroGrid() {
 	return (
 		<section className="py-20 md:py-24 bg-surface" aria-labelledby="philo">
 			<div className="container max-w-7xl grid md:grid-cols-4 gap-4 md:gap-6 items-stretch">
-				{['intro/p1.jpg','intro/p2.jpg','intro/p3.jpg'].map((src, i) => (
+				{[
+					{src: 'intro-braids.jpg', alt: 'Black woman with beautiful cornrows being styled by professional stylist'},
+					{src: 'intro-silk-press.jpg', alt: 'Black woman with sleek straightened hair being styled with precision'},
+					{src: 'intro-afro.jpg', alt: 'Black woman with voluminous natural afro being styled with round brush'}
+				].map((img, i) => (
 					<div key={i} className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.06)] break-inside-avoid">
-						<Image src={`/images/${src}`} alt={`Black woman with ${i===0?'natural curls':i===1?'protective braids':'silk press'} hairstyle`} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" priority={i===0} />
+						<Image src={`/images/intro/${img.src}`} alt={img.alt} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" priority={i===0} />
 					</div>
 				))}
 				<div className="rounded-2xl bg-bg p-6 md:p-8 shadow-[0_8px_24px_rgba(0,0,0,0.06)] grid">
