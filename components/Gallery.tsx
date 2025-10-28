@@ -39,7 +39,7 @@ export default function Gallery() {
 					<div key={src} className="mb-4 break-inside-avoid">
 						<button ref={i===0?triggerRef:null} onClick={() => { setActive(i); setOpen(true) }} aria-label="Open image" className="block w-full">
 							<span className="relative block aspect-[4/5] rounded-2xl overflow-hidden shadow-md ring-1 ring-black/5">
-								<Image src={src} alt="Salon style" fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover" loading="lazy" decoding="async" />
+								<Image src={src} alt="Black women hair styles and transformations" fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover" loading="lazy" decoding="async" />
 							</span>
 						</button>
 					</div>
@@ -50,7 +50,7 @@ export default function Gallery() {
 				<div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Image viewer" className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setOpen(false)}>
 					<div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
 						<div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-card bg-black">
-							<Image src={imgs[active]} alt="Salon style enlarged" fill className="object-contain" />
+							<Image src={imgs[active]} alt="Black women hair styles and transformations - enlarged view" fill className="object-contain" />
 						</div>
 						<div className="mt-3 flex items-center justify-between">
 							<button data-focus className="btn-pill btn-outline" onClick={() => setOpen(false)}>Close</button>
