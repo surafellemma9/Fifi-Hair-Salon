@@ -1,0 +1,689 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f5 50%, #fff8e1 100%);
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header and Navigation */
+.navbar {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #fbbf24 100%);
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #fbbf24;
+    transform: translateY(-2px);
+}
+
+.owner-link {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.owner-link:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    color: white;
+    margin-top: 80px;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #dc2626, #b91c1c, #fbbf24, #f59e0b);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    z-index: -2;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="hairPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="1200" height="600" fill="url(%23hairPattern)"/></svg>');
+    background-size: 200px 200px;
+    animation: backgroundMove 20s linear infinite;
+    z-index: -1;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes backgroundMove {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-200px) translateY(-200px); }
+}
+
+.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; }
+.hero-text { position: relative; z-index: 1; animation: fadeInUp 1s ease-out; }
+.hero-text h2 { font-family: 'Playfair Display', serif; font-size: 3.2rem; line-height: 1.1; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+.hero-text p { font-size: 1.05rem; max-width: 540px; margin-bottom: 1.5rem; color: #feeecd; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+.hero-actions { display: flex; gap: 0.8rem; }
+.hero-image { position: relative; z-index: 1; }
+.hero-image img { width: 100%; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); object-fit: cover; height: 520px; }
+
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(45deg, #ffffff, #fef3c7);
+    color: #dc2626;
+    padding: 1.2rem 2.5rem;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.4);
+    color: #b91c1c;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-pill { display:inline-block; padding: 0.8rem 1.2rem; border-radius: 999px; font-weight: 700; text-decoration:none; transition: all 0.2s ease; border: 2px solid rgba(255,255,255,0.6); backdrop-filter: blur(2px); }
+.btn-pill.primary { background: #fff; color: #7a4a32; border-color: #fff; }
+.btn-pill.primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.btn-pill.ghost { background: transparent; color: #fff; }
+.btn-pill.ghost:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+/* Services Section */
+.services {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #fffbeb 100%);
+    position: relative;
+}
+
+.services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(220,38,38,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.services .container {
+    position: relative;
+    z-index: 1;
+}
+
+.services h2 {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 4rem;
+    color: #dc2626;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);
+    position: relative;
+}
+
+.services h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(45deg, #dc2626, #fbbf24);
+    border-radius: 2px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.service-card {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #fef7f7 100%);
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.1);
+    transition: all 0.4s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.service-card:hover::before {
+    left: 100%;
+}
+
+.service-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+    border-color: #fbbf24;
+}
+
+.service-card i {
+    font-size: 4rem;
+    color: #dc2626;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover i {
+    color: #fbbf24;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.service-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #dc2626;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.service-card:hover h3 {
+    color: #b91c1c;
+}
+
+.service-card p {
+    color: #666;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Philosophy row (template style) */
+.philosophy { padding: 4rem 0; background: #fff; }
+.philosophy-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+.philo-card { border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+.philo-card img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1 / 1; }
+.philo-copy { background: #f7f1ea; border-radius: 14px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+.philo-copy h2 { font-family: 'Playfair Display', serif; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px; color: #7a4a32; margin-bottom: 0.5rem; }
+.philo-copy h3 { font-size: 1.1rem; color: #7a4a32; margin-bottom: 1rem; font-weight: 700; }
+.philo-copy p { color: #5b4a42; margin-bottom: 1.25rem; }
+
+/* Booking Section */
+.booking {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #fffbeb 100%);
+    position: relative;
+}
+
+.booking::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="bookingPattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="2" fill="rgba(220,38,38,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(251,191,36,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23bookingPattern)"/></svg>');
+    opacity: 0.4;
+    z-index: 0;
+}
+
+.booking .container {
+    position: relative;
+    z-index: 1;
+}
+
+.booking h2 {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 4rem;
+    color: #dc2626;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);
+    position: relative;
+}
+
+.booking h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(45deg, #dc2626, #fbbf24);
+    border-radius: 2px;
+}
+
+.booking-form {
+    max-width: 700px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff 0%, #fef7f7 100%);
+    padding: 3rem;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(220, 38, 38, 0.15);
+    border: 2px solid rgba(220, 38, 38, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(45deg, #dc2626, #fbbf24, #dc2626);
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    color: #dc2626;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 3px solid #fbbf24;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
+    transform: translateY(-2px);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #dc2626, #b91c1c, #fbbf24);
+    background-size: 200% 100%;
+    color: white;
+    padding: 1.2rem 2rem;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+    background-position: 100% 0;
+}
+
+.submit-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.success-message {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 3px solid #28a745;
+    border-radius: 20px;
+    margin-top: 2rem;
+    color: #155724;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.2);
+    animation: successPulse 2s ease-in-out infinite;
+}
+
+.success-message i {
+    font-size: 4rem;
+    color: #28a745;
+    margin-bottom: 1.5rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes successPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Contact Section */
+.contact {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 50%, #fffbeb 100%);
+    position: relative;
+}
+
+.contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="contactPattern" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1.5" fill="rgba(220,38,38,0.1)"/><circle cx="5" cy="5" r="0.8" fill="rgba(251,191,36,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23contactPattern)"/></svg>');
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.contact .container {
+    position: relative;
+    z-index: 1;
+}
+
+.contact h2 {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 4rem;
+    color: #dc2626;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);
+    position: relative;
+}
+
+.contact h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(45deg, #dc2626, #fbbf24);
+    border-radius: 2px;
+}
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.contact-item {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #fef7f7 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.1);
+    transition: all 0.4s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.contact-item:hover::before {
+    left: 100%;
+}
+
+.contact-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+    border-color: #fbbf24;
+}
+
+.contact-item i {
+    font-size: 3.5rem;
+    color: #dc2626;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover i {
+    color: #fbbf24;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.contact-item p {
+    color: #666;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #fbbf24 100%);
+    color: white;
+    text-align: center;
+    padding: 3rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footerPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23footerPattern)"/></svg>');
+    opacity: 0.5;
+    z-index: 0;
+}
+
+footer .container {
+    position: relative;
+    z-index: 1;
+}
+
+footer p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-image img { height: 360px; }
+    .nav-menu {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .hero-text h2 { font-size: 2.2rem; }
+    .hero-text p { font-size: 1rem; }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .booking-form {
+        margin: 0 1rem;
+    }
+    .philosophy-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .services h2,
+    .about h2,
+    .booking h2,
+    .contact h2 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,11 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Redirect admin requests to admin directory
+RewriteRule ^admin/?$ admin/index.html [L]
+
+# Ensure admin directory is accessible
+RewriteRule ^admin/(.*)$ admin/$1 [L]
+
+# Default document for root directory
+DirectoryIndex index.html
