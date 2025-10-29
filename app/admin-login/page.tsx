@@ -1,8 +1,8 @@
 "use client"
 
 import { useTranslation } from '@/contexts/TranslationContext'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function AdminLoginPage() {
 	const { t } = useTranslation()
@@ -95,14 +95,13 @@ export default function AdminLoginPage() {
 						</button>
 					</form>
 
-						<div className="text-center">
-							<a 
-								href="/" 
-								className="text-sm text-muted hover:text-ink transition-colors"
-							>
-								← Back to Home
-							</a>
-						</div>
+					<div className="text-center">
+						<a 
+							href="/" 
+							className="text-sm text-muted hover:text-ink transition-colors"
+						>
+							← Back to Home
+						</a>
 					</div>
 				</div>
 			</div>

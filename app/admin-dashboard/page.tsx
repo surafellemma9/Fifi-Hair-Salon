@@ -8,6 +8,7 @@ interface Appointment {
 	firstName: string
 	lastName: string
 	service: string
+	servicePrice: number
 	date: string
 	time: string
 	phone: string
