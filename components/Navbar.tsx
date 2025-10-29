@@ -39,17 +39,17 @@ export default function Navbar() {
 			{open && (
 				<div className="md:hidden fixed inset-0 z-50" aria-modal="true" role="dialog" onClick={()=>setOpen(false)}>
 					<div className="absolute inset-0 bg-black/50" />
-					<div ref={panelRef} className="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-green-dark shadow-card p-6 flex flex-col gap-4 border-l border-green-darker/30" onClick={(e)=>e.stopPropagation()}>
+					<div ref={panelRef} className="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-green-dark shadow-card p-6 flex flex-col gap-4 border-l border-green-darker/30" style={{backgroundColor: '#1a3a2e'}} onClick={(e)=>e.stopPropagation()}>
 						<div className="flex items-center justify-between">
 							<span className="font-serif text-lg text-white">Menu</span>
 							<button className="rounded-full px-3 py-2 ring-1 ring-white/20 text-white hover:bg-white/10 transition-colors" aria-label="Close menu" onClick={()=>setOpen(false)}>✕</button>
 						</div>
 						<nav className="mt-2 flex flex-col gap-3">
-							{links.map(l=> <a key={l.href} href={l.href} className="py-2 text-white/90 hover:text-white transition-colors">{l.label}</a>)}
+							{links.map(l=> <a key={l.href} href={l.href} className="py-2 text-white hover:text-pink-light transition-colors font-medium">{l.label}</a>)}
 						</nav>
 						<div className="mt-auto flex flex-col gap-3">
 							<TranslateButton />
-							<a href="/booking" className="rounded-full px-5 py-2.5 shadow-sm bg-accent hover:bg-accent-strong text-white">{t.nav.bookAppointment}</a>
+							<a href="/booking" className="rounded-full px-5 py-2.5 shadow-sm bg-accent hover:bg-accent-strong text-white font-medium text-center">{t.nav.bookAppointment}</a>
 						</div>
 					</div>
 				</div>
