@@ -9,12 +9,19 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				bg: '#f6f3f1', // almond
+				bg: '#fef7f7', // baby pink background
 				surface: '#ffffff',
-				ink: '#2a1f1a', // espresso
-				accent: '#8a5a44', // cocoa
-				'accent-strong': '#6d4030',
-				muted: '#8f837c',
+				ink: '#2d4a3e', // deep green text
+				accent: '#e8a4b8', // baby pink accent
+				'accent-strong': '#d67a95', // deeper baby pink
+				muted: '#7a8b85', // muted green-gray
+				'pink-light': '#fdf2f8', // very light pink
+				'pink-medium': '#fce7f3', // medium light pink
+				'green-light': '#f0fdf4', // very light green
+				'green-medium': '#dcfce7', // medium light green
+				'green-accent': '#86efac', // soft green accent
+				'green-dark': '#1a3a2e', // dark green for navbar
+				'green-darker': '#0f241c', // darker green
 			},
 			fontFamily: {
 				serif: ['var(--font-serif)', 'Playfair Display', 'Libre Baskerville', 'serif'],

@@ -20,19 +20,29 @@ export const services: Service[] = [
 	{ slug: 'loc', title: 'Loc Maintenance', description: 'Loc retwists, palm rolling, and maintenance for healthy locs.', startingAt: '$85', icon: '/images/services/locs.jpg' },
 ]
 
-export default function ServiceCard({ item }: { item: Service }) {
+export default function ServiceCard({ item, index = 0 }: { item: Service; index?: number }) {
+	const isEven = index % 2 === 0;
+	
 	return (
-		<article className="rounded-2xl bg-surface shadow-soft ring-1 ring-black/5 flex flex-col overflow-hidden">
+		<article className="rounded-2xl bg-surface shadow-soft ring-1 ring-accent/10 flex flex-col overflow-hidden group hover:shadow-lg hover:ring-accent/20 transition-all duration-300">
 			{item.icon && (
-				<div className="relative aspect-[4/3]">
-					<Image src={item.icon} alt="" fill className="object-cover" />
+				<div className="relative aspect-[4/3] overflow-hidden">
+					<Image src={item.icon} alt="" fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+					<div className="absolute inset-0 bg-gradient-to-t from-green-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 				</div>
 			)}
 			<div className="p-5 flex-1 flex flex-col">
 				<h3 className="font-serif text-xl text-ink">{item.title}</h3>
 				<p className="mt-2 text-sm text-ink/80 flex-1">{item.description}</p>
 				<p className="mt-3 text-sm text-muted">From {item.startingAt}</p>
-				<Link href="/booking" className="mt-4 self-start btn-pill btn-outline text-sm">Book</Link>
+				<Link 
+					href="/booking" 
+					className={`mt-4 self-start btn-pill text-sm transition-all duration-300 hover:scale-105 ${
+						isEven ? 'btn-green-outline' : 'btn-outline'
+					}`}
+				>
+					Book
+				</Link>
 			</div>
 		</article>
 	)

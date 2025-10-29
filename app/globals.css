@@ -3,12 +3,19 @@
 @tailwind utilities;
 
 :root {
-	--bg: #f6f3f1;
+	--bg: #fef7f7;
 	--surface: #ffffff;
-	--ink: #2a1f1a;
-	--accent: #8a5a44;
-	--accent-strong: #6d4030;
-	--muted: #8f837c;
+	--ink: #2d4a3e;
+	--accent: #e8a4b8;
+	--accent-strong: #d67a95;
+	--muted: #7a8b85;
+	--pink-light: #fdf2f8;
+	--pink-medium: #fce7f3;
+	--green-light: #f0fdf4;
+	--green-medium: #dcfce7;
+	--green-accent: #86efac;
+	--green-dark: #1a3a2e;
+	--green-darker: #0f241c;
 }
 
 html, body {
@@ -23,5 +30,7 @@ html, body {
 	.btn-pill { @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 font-medium transition shadow-softer; }
 	.btn-accent { @apply bg-accent text-white hover:bg-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent; }
 	.btn-outline { @apply border border-accent text-accent hover:bg-accent/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent; }
+	.btn-green { @apply bg-green-accent text-green-dark hover:bg-green-accent/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-accent; }
+	.btn-green-outline { @apply border border-green-accent text-green-dark hover:bg-green-accent/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-accent; }
 	.section { @apply py-12 md:py-16; }
 }

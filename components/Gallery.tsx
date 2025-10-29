@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslation } from '@/contexts/TranslationContext'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import Section from './Section'
@@ -7,6 +8,7 @@ import Section from './Section'
 const imgs = Array.from({ length: 12 }).map((_, i) => `/images/gallery/${String(i + 1).padStart(2, '0')}.jpg`)
 
 export default function Gallery() {
+	const { t } = useTranslation()
 	const [open, setOpen] = useState(false)
 	const [active, setActive] = useState(0)
 	const triggerRef = useRef<HTMLButtonElement | null>(null)
@@ -33,13 +35,14 @@ export default function Gallery() {
 	}, [open])
 
 	return (
-		<Section id="gallery" eyebrow="Gallery" title="Recent Work" subtitle="A glimpse into styles created by our team.">
+		<Section id="gallery" eyebrow={t.gallery.eyebrow} title={t.gallery.title} subtitle={t.gallery.subtitle}>
 			<div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
 				{imgs.map((src, i) => (
 					<div key={src} className="mb-4 break-inside-avoid">
-						<button ref={i===0?triggerRef:null} onClick={() => { setActive(i); setOpen(true) }} aria-label="Open image" className="block w-full">
-							<span className="relative block aspect-[4/5] rounded-2xl overflow-hidden shadow-md ring-1 ring-black/5">
-								<Image src={src} alt="Black women hair styles and transformations" fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover" loading="lazy" decoding="async" />
+						<button ref={i===0?triggerRef:null} onClick={() => { setActive(i); setOpen(true) }} aria-label="Open image" className="block w-full group">
+							<span className="relative block aspect-[4/5] rounded-2xl overflow-hidden shadow-md ring-1 ring-accent/20 group-hover:ring-accent/40 transition-all duration-300 group-hover:shadow-lg">
+								<Image src={src} alt="Black women hair styles and transformations" fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" />
+								<div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 							</span>
 						</button>
 					</div>

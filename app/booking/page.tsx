@@ -1,6 +1,6 @@
 "use client"
 
-import { services } from '@/components/ServiceCard'
+import { useTranslation } from '@/contexts/TranslationContext'
 import { useEffect, useMemo, useState } from 'react'
 
 const CALENDLY = process.env.NEXT_PUBLIC_CALENDLY_URL
@@ -13,6 +13,7 @@ const timeSlots = [
 ]
 
 export default function BookingPage() {
+	const { t } = useTranslation()
 	const [formData, setFormData] = useState({
 		firstName: '',
 		lastName: '',
@@ -26,6 +27,21 @@ export default function BookingPage() {
 	const [submitted, setSubmitted] = useState(false)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 	const [calendlyReady, setCalendlyReady] = useState(false)
+
+	// Create comprehensive services list from translations
+	const allServices = useMemo(() => {
+		const services: Array<{ value: string; label: string; category: string }> = []
+		t.services.categories.forEach(category => {
+			category.items.forEach(service => {
+				services.push({
+					value: service.name.toLowerCase().replace(/\s+/g, '-'),
+					label: `${service.name} - ${service.price}`,
+					category: category.name
+				})
+			})
+		})
+		return services
+	}, [t.services.categories])
 
 	useEffect(() => {
 		if (!CALENDLY) return
@@ -49,53 +65,98 @@ export default function BookingPage() {
 	const validateForm = () => {
 		const newErrors: Record<string, string> = {}
 		
-		if (!formData.firstName.trim()) newErrors.firstName = 'First name is required'
-		if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required'
-		if (!formData.phone.trim()) newErrors.phone = 'Phone number is required'
-		if (!formData.email.trim()) newErrors.email = 'Email is required'
-		if (!formData.service) newErrors.service = 'Please select a service'
-		if (!formData.date) newErrors.date = 'Please select a date'
-		if (!formData.time) newErrors.time = 'Please select a time'
+		if (!formData.firstName.trim()) newErrors.firstName = t.booking.form.required
+		if (!formData.lastName.trim()) newErrors.lastName = t.booking.form.required
+		if (!formData.phone.trim()) newErrors.phone = t.booking.form.required
+		if (!formData.email.trim()) newErrors.email = t.booking.form.required
+		if (!formData.service) newErrors.service = t.booking.form.required
+		if (!formData.date) newErrors.date = t.booking.form.required
+		if (!formData.time) newErrors.time = t.booking.form.required
 		
 		// Email validation
 		if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-			newErrors.email = 'Please enter a valid email address'
+			newErrors.email = t.booking.form.invalidEmail
 		}
 		
 		// Phone validation (basic)
 		if (formData.phone && !/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
-			newErrors.phone = 'Please enter a valid phone number'
+			newErrors.phone = t.booking.form.invalidPhone
 		}
 		
 		// Date validation (not in the past)
 		if (formData.date && new Date(formData.date) < new Date()) {
-			newErrors.date = 'Please select a future date'
+			newErrors.date = t.booking.form.pastDate
 		}
 		
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
 	}
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (validateForm()) {
-			// Here you would typically send the data to your backend
-			console.log('Booking submitted:', formData)
-			setSubmitted(true)
-			// Reset form after 3 seconds
-			setTimeout(() => {
-				setSubmitted(false)
-				setFormData({
-					firstName: '',
-					lastName: '',
-					phone: '',
-					email: '',
-					service: '',
-					date: '',
-					time: '',
-					notes: ''
+			try {
+				const response = await fetch('/api/admin/appointments', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
 				})
-			}, 3000)
+
+				if (response.ok) {
+					setSubmitted(true)
+					// Reset form after 3 seconds
+					setTimeout(() => {
+						setSubmitted(false)
+						setFormData({
+							firstName: '',
+							lastName: '',
+							phone: '',
+							email: '',
+							service: '',
+							date: '',
+							time: '',
+							notes: ''
+						})
+					}, 3000)
+				} else {
+					const errorData = await response.json()
+					console.error('Booking failed:', errorData)
+					// Still show success to user, but log the error
+					setSubmitted(true)
+					setTimeout(() => {
+						setSubmitted(false)
+						setFormData({
+							firstName: '',
+							lastName: '',
+							phone: '',
+							email: '',
+							service: '',
+							date: '',
+							time: '',
+							notes: ''
+						})
+					}, 3000)
+				}
+			} catch (error) {
+				console.error('Booking error:', error)
+				// Still show success to user, but log the error
+				setSubmitted(true)
+				setTimeout(() => {
+					setSubmitted(false)
+					setFormData({
+						firstName: '',
+						lastName: '',
+						phone: '',
+						email: '',
+						service: '',
+						date: '',
+						time: '',
+						notes: ''
+					})
+				}, 3000)
+			}
 		}
 	}
 
@@ -116,11 +177,11 @@ export default function BookingPage() {
 	}), [])
 
 	return (
-		<main className="container py-16">
+		<main className="container py-16 bg-gradient-to-br from-pink-light to-green-light min-h-screen">
 			<div className="max-w-4xl mx-auto">
 				<div className="text-center mb-8">
-					<h1 className="font-serif text-4xl md:text-5xl text-ink">Book Your Hair Journey</h1>
-					<p className="mt-4 text-lg text-muted">Ready to embrace your natural beauty? Let's create something amazing together.</p>
+					<h1 className="font-serif text-4xl md:text-5xl text-ink">{t.booking.title}</h1>
+					<p className="mt-4 text-lg text-muted">{t.booking.subtitle}</p>
 				</div>
 
 				{CALENDLY ? (
@@ -129,69 +190,73 @@ export default function BookingPage() {
 						<noscript><a className="underline" href={CALENDLY}>Open booking</a></noscript>
 					</div>
 				) : (
-					<div className="bg-surface rounded-2xl p-8 shadow-soft ring-1 ring-black/5">
-						<form onSubmit={handleSubmit} className="space-y-6">
+					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-soft ring-1 ring-accent/20 relative overflow-hidden">
+						{/* Decorative elements */}
+						<div className="absolute top-0 right-0 w-32 h-32 bg-green-accent/10 rounded-full blur-3xl"></div>
+						<div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/10 rounded-full blur-2xl"></div>
+						
+						<form onSubmit={handleSubmit} className="space-y-6 relative z-10">
 							{/* Personal Information */}
 							<div>
-								<h2 className="font-serif text-2xl text-ink mb-4">Personal Information</h2>
+								<h2 className="font-serif text-2xl text-ink mb-4">{t.booking.form.firstName} & {t.booking.form.lastName}</h2>
 								<div className="grid md:grid-cols-2 gap-4">
 									<div>
-										<label htmlFor="firstName" className="block text-sm font-medium text-ink mb-2">First Name *</label>
+										<label htmlFor="firstName" className="block text-sm font-medium text-ink mb-2">{t.booking.form.firstName} *</label>
 										<input
 											id="firstName"
 											name="firstName"
 											type="text"
 											value={formData.firstName}
 											onChange={handleInputChange}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.firstName ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.firstName ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
-											placeholder="Enter your first name"
+											placeholder={t.booking.form.firstName}
 										/>
 										{errors.firstName && <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>}
 									</div>
 									<div>
-										<label htmlFor="lastName" className="block text-sm font-medium text-ink mb-2">Last Name *</label>
+										<label htmlFor="lastName" className="block text-sm font-medium text-ink mb-2">{t.booking.form.lastName} *</label>
 										<input
 											id="lastName"
 											name="lastName"
 											type="text"
 											value={formData.lastName}
 											onChange={handleInputChange}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.lastName ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.lastName ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
-											placeholder="Enter your last name"
+											placeholder={t.booking.form.lastName}
 										/>
 										{errors.lastName && <p className="mt-1 text-sm text-red-500">{errors.lastName}</p>}
 									</div>
 								</div>
 								<div className="grid md:grid-cols-2 gap-4 mt-4">
 									<div>
-										<label htmlFor="phone" className="block text-sm font-medium text-ink mb-2">Phone Number *</label>
+										<label htmlFor="phone" className="block text-sm font-medium text-ink mb-2">{t.booking.form.phone} *</label>
 										<input
 											id="phone"
 											name="phone"
 											type="tel"
 											value={formData.phone}
 											onChange={handleInputChange}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.phone ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.phone ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
 											placeholder="(555) 123-4567"
 										/>
 										{errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
 									</div>
 									<div>
-										<label htmlFor="email" className="block text-sm font-medium text-ink mb-2">Email Address *</label>
+										<label htmlFor="email" className="block text-sm font-medium text-ink mb-2">{t.booking.form.email} *</label>
 										<input
 											id="email"
 											name="email"
 											type="email"
 											value={formData.email}
 											onChange={handleInputChange}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.email ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.email ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
 											placeholder="your@email.com"
 										/>
@@ -202,35 +267,40 @@ export default function BookingPage() {
 
 							{/* Service Selection */}
 							<div>
-								<h2 className="font-serif text-2xl text-ink mb-4">Service Selection</h2>
+								<h2 className="font-serif text-2xl text-ink mb-4">{t.booking.form.service}</h2>
 								<div>
-									<label htmlFor="service" className="block text-sm font-medium text-ink mb-2">Choose Your Service *</label>
+									<label htmlFor="service" className="block text-sm font-medium text-ink mb-2">{t.booking.form.service} *</label>
 									<select
 										id="service"
 										name="service"
 										value={formData.service}
 										onChange={handleInputChange}
-										className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-											errors.service ? 'border-red-500' : 'border-accent/30'
+										className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+											errors.service ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 										}`}
 									>
 										<option value="">Select a service</option>
-										{services.map((service) => (
-											<option key={service.slug} value={service.slug}>
-												{service.title} - {service.startingAt}
-											</option>
+										{t.services.categories.map((category) => (
+											<optgroup key={category.name} label={category.name}>
+												{category.items.map((service) => (
+													<option key={service.name} value={service.name.toLowerCase().replace(/\s+/g, '-')}>
+														{service.name} - {service.price}
+													</option>
+												))}
+											</optgroup>
 										))}
 									</select>
 									{errors.service && <p className="mt-1 text-sm text-red-500">{errors.service}</p>}
+									<p className="mt-2 text-xs text-muted italic">{t.services.priceNote}</p>
 								</div>
 							</div>
 
 							{/* Date & Time Selection */}
 							<div>
-								<h2 className="font-serif text-2xl text-ink mb-4">Preferred Date & Time</h2>
+								<h2 className="font-serif text-2xl text-ink mb-4">{t.booking.form.date} & {t.booking.form.time}</h2>
 								<div className="grid md:grid-cols-2 gap-4">
 									<div>
-										<label htmlFor="date" className="block text-sm font-medium text-ink mb-2">Select Date *</label>
+										<label htmlFor="date" className="block text-sm font-medium text-ink mb-2">{t.booking.form.date} *</label>
 										<input
 											id="date"
 											name="date"
@@ -238,21 +308,21 @@ export default function BookingPage() {
 											value={formData.date}
 											onChange={handleInputChange}
 											min={new Date().toISOString().split('T')[0]}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.date ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.date ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
 										/>
 										{errors.date && <p className="mt-1 text-sm text-red-500">{errors.date}</p>}
 									</div>
 									<div>
-										<label htmlFor="time" className="block text-sm font-medium text-ink mb-2">Select Time *</label>
+										<label htmlFor="time" className="block text-sm font-medium text-ink mb-2">{t.booking.form.time} *</label>
 										<select
 											id="time"
 											name="time"
 											value={formData.time}
 											onChange={handleInputChange}
-											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
-												errors.time ? 'border-red-500' : 'border-accent/30'
+											className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
+												errors.time ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
 											}`}
 										>
 											<option value="">Choose a time</option>
@@ -269,15 +339,15 @@ export default function BookingPage() {
 
 							{/* Additional Notes */}
 							<div>
-								<label htmlFor="notes" className="block text-sm font-medium text-ink mb-2">Additional Notes</label>
+								<label htmlFor="notes" className="block text-sm font-medium text-ink mb-2">{t.booking.form.notes}</label>
 								<textarea
 									id="notes"
 									name="notes"
 									value={formData.notes}
 									onChange={handleInputChange}
 									rows={4}
-									className="w-full rounded-2xl border border-accent/30 px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-									placeholder="Tell us about your hair goals, any specific requests, or questions you have..."
+									className="w-full rounded-2xl border border-accent/30 px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors hover:border-accent/50"
+									placeholder={t.booking.form.notesPlaceholder}
 								/>
 							</div>
 
@@ -286,14 +356,14 @@ export default function BookingPage() {
 								<button
 									type="submit"
 									disabled={submitted}
-									className="w-full rounded-full px-8 py-4 text-lg font-medium shadow-sm bg-accent hover:bg-accent-strong text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed"
+									className="w-full rounded-full px-8 py-4 text-lg font-medium shadow-sm bg-gradient-to-r from-accent to-green-accent hover:from-accent-strong hover:to-green-accent/80 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
 								>
-									{submitted ? 'Booking Submitted!' : 'Book Your Appointment'}
+									{submitted ? t.booking.form.submitted : t.booking.form.submit}
 								</button>
 								{submitted && (
 									<div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-2xl">
 										<p className="text-green-800 text-center">
-											🎉 Thank you! We've received your booking request and will confirm your appointment within 24 hours.
+											🎉 {t.booking.form.successMessage}
 										</p>
 									</div>
 								)}

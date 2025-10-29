@@ -1,3 +1,4 @@
+import { TranslationProvider } from '@/contexts/TranslationContext'
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
@@ -8,7 +9,7 @@ const sans = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap
 export const metadata: Metadata = {
 	title: 'Fifi Hair Salon — Modern Haircare in Style',
 	description: 'Professional haircuts, bespoke coloring, and nourishing treatments — tailored to your unique beauty and style.',
-	themeColor: '#8a5a44',
+	themeColor: '#e8a4b8',
 	openGraph: {
 		title: 'Fifi Hair Salon',
 		description: 'Professional haircuts, bespoke coloring, and nourishing treatments — tailored to your unique beauty and style.',
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" className={`${serif.variable} ${sans.variable}`}>
 			<body className="min-h-dvh bg-bg text-ink antialiased">
-				{children}
+				<TranslationProvider>
+					{children}
+				</TranslationProvider>
 			</body>
 		</html>
 	)
