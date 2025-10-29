@@ -20,13 +20,15 @@ export default function BookingPage() {
 		phone: '',
 		email: '',
 		service: '',
+		servicePrice: 0,
 		date: '',
 		time: '',
 		notes: ''
 	})
-	const [submitted, setSubmitted] = useState(false)
-	const [errors, setErrors] = useState<Record<string, string>>({})
-	const [calendlyReady, setCalendlyReady] = useState(false)
+const [submitted, setSubmitted] = useState(false)
+const [errors, setErrors] = useState<Record<string, string>>({})
+const [calendlyReady, setCalendlyReady] = useState(false)
+const [showForm, setShowForm] = useState(true)
 
 	// Create comprehensive services list from translations
 	const allServices = useMemo(() => {
@@ -55,7 +57,22 @@ export default function BookingPage() {
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target
-		setFormData(prev => ({ ...prev, [name]: value }))
+		
+		// If service is selected, extract and set the price
+		if (name === 'service') {
+			const selectedService = t.services.categories
+				.flatMap(cat => cat.items)
+				.find(s => s.name.toLowerCase().replace(/\s+/g, '-') === value)
+			
+			setFormData(prev => ({ 
+				...prev, 
+				[name]: value,
+				servicePrice: selectedService ? parseFloat(selectedService.price.replace(/[^0-9.]/g, '')) || 0 : 0
+			}))
+		} else {
+			setFormData(prev => ({ ...prev, [name]: value }))
+		}
+		
 		// Clear error when user starts typing
 		if (errors[name]) {
 			setErrors(prev => ({ ...prev, [name]: '' }))
@@ -104,59 +121,19 @@ export default function BookingPage() {
 					body: JSON.stringify(formData),
 				})
 
-				if (response.ok) {
-					setSubmitted(true)
-					// Reset form after 3 seconds
-					setTimeout(() => {
-						setSubmitted(false)
-						setFormData({
-							firstName: '',
-							lastName: '',
-							phone: '',
-							email: '',
-							service: '',
-							date: '',
-							time: '',
-							notes: ''
-						})
-					}, 3000)
-				} else {
-					const errorData = await response.json()
-					console.error('Booking failed:', errorData)
-					// Still show success to user, but log the error
-					setSubmitted(true)
-					setTimeout(() => {
-						setSubmitted(false)
-						setFormData({
-							firstName: '',
-							lastName: '',
-							phone: '',
-							email: '',
-							service: '',
-							date: '',
-							time: '',
-							notes: ''
-						})
-					}, 3000)
-				}
-			} catch (error) {
-				console.error('Booking error:', error)
-				// Still show success to user, but log the error
+			if (response.ok) {
+				setShowForm(false)
 				setSubmitted(true)
-				setTimeout(() => {
-					setSubmitted(false)
-					setFormData({
-						firstName: '',
-						lastName: '',
-						phone: '',
-						email: '',
-						service: '',
-						date: '',
-						time: '',
-						notes: ''
-					})
-				}, 3000)
+			} else {
+				const errorData = await response.json()
+				console.error('Booking failed:', errorData)
+				// Show error to user
+				setErrors({ submit: 'Failed to book appointment. Please try again.' })
 			}
+		} catch (error) {
+			console.error('Booking error:', error)
+			setErrors({ submit: 'Network error. Please check your connection and try again.' })
+		}
 		}
 	}
 
@@ -202,7 +179,7 @@ export default function BookingPage() {
 						<div className="calendly-inline-widget rounded-2xl ring-1 ring-black/5 shadow-soft" data-url={CALENDLY} style={{ minWidth: '320px', height: 740 }} />
 						<noscript><a className="underline" href={CALENDLY}>Open booking</a></noscript>
 					</div>
-				) : (
+				) : showForm ? (
 					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-8 shadow-soft ring-1 ring-accent/20 relative overflow-hidden">
 						{/* Decorative elements */}
 						<div className="absolute top-0 right-0 w-32 h-32 bg-green-accent/10 rounded-full blur-3xl"></div>
@@ -371,23 +348,37 @@ export default function BookingPage() {
 									disabled={submitted}
 									className="w-full rounded-full px-8 py-4 text-lg font-medium shadow-sm bg-gradient-to-r from-accent to-green-accent hover:from-accent-strong hover:to-green-accent/80 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
 								>
-									{submitted ? t.booking.form.submitted : t.booking.form.submit}
+									{submitted ? 'Booking...' : t.booking.form.submit}
 								</button>
-								{submitted && (
-									<div className="mt-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
-										<div className="text-center">
-											<div className="text-4xl mb-2">🎉</div>
-											<p className="text-green-800 text-lg font-medium mb-2">
-												{t.booking.form.successMessage}
-											</p>
-											<p className="text-green-700 text-sm">
-												Your appointment has been successfully booked and will appear in the admin dashboard.
-											</p>
-										</div>
-									</div>
-								)}
+								{errors.submit && <p className="mt-2 text-sm text-red-500 text-center">{errors.submit}</p>}
 							</div>
 						</form>
+					</div>
+				) : (
+					<div className="fixed inset-0 bg-white/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+						<div className="text-center max-w-md">
+							<div className="mb-6 inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full">
+								<svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+								</svg>
+							</div>
+							<h2 className="font-serif text-3xl text-ink mb-4">Appointment Confirmed!</h2>
+							<p className="text-lg text-muted mb-6">
+								{t.booking.form.successMessage}
+							</p>
+							<p className="text-sm text-muted mb-8">
+								Your appointment has been successfully booked and will appear in the admin dashboard.
+							</p>
+							<a 
+								href="/" 
+								className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white rounded-full font-medium hover:bg-accent-strong transition-colors"
+							>
+								<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+								</svg>
+								Back to Home
+							</a>
+						</div>
 					</div>
 				)}
 			</div>
