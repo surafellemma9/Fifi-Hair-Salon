@@ -1,13 +1,13 @@
-import DatabaseManager from '@/lib/database'
+import UnifiedDatabaseManager from '@/lib/database-manager'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Initialize database manager
-const db = DatabaseManager.getInstance()
+// Initialize database manager (auto-switches between SQLite and Supabase)
+const db = UnifiedDatabaseManager.getInstance()
 
 export async function GET(request: NextRequest) {
 	try {
 		// Get appointment statistics
-		const stats = db.getStats()
+		const stats = await Promise.resolve(db.getStats())
 		
 		return NextResponse.json({ 
 			stats

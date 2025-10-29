@@ -1,14 +1,22 @@
+"use client"
+
 import ContactBlock from '@/components/ContactBlock'
 import Footer from '@/components/Footer'
 import Gallery from '@/components/Gallery'
 import Hero from '@/components/Hero'
-import IntroGrid from '@/components/IntroGrid'
 import Navbar from '@/components/Navbar'
 import Pricing from '@/components/Pricing'
 import Services from '@/components/Services'
 import Testimonials from '@/components/Testimonials'
+import { useEffect } from 'react'
 
 export default function Page() {
+	// Ensure page loads at top unless there's a hash
+	useEffect(() => {
+		if (!window.location.hash) {
+			window.scrollTo(0, 0)
+		}
+	}, [])
 	const jsonLd = {
 		"@context": "https://schema.org",
 		"@type": "BeautySalon",
@@ -29,7 +37,6 @@ export default function Page() {
 			<Navbar />
 			<main>
 				<Hero />
-				<IntroGrid />
 				<Services />
 				<Gallery />
 				<Pricing />

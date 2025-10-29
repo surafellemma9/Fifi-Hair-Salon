@@ -1,0 +1,33 @@
+# Supabase Setup - Follow These Steps
+
+STEP 1: Go to https://supabase.com
+        - Sign in with Google or GitHub
+        - Click "Start your project" if new
+        - Click "New project" button
+
+STEP 2: Fill in project details:
+        Name: fifi-hair-salon
+        Database Password: [CREATE STRONG PASSWORD - SAVE IT!]
+        Region: East US (N. Virginia) or closest to you
+        Plan: Free
+
+STEP 3: Click "Create new project"
+        Wait 2-3 minutes for setup to complete
+
+STEP 4: Get your credentials:
+        - Click Settings icon (left sidebar)
+        - Click "API" section
+        - Copy these values:
+          * Project URL: https://xxxxx.supabase.co
+          * anon public key: eyJhbGc...
+          * service_role key: eyJhbGc...
+
+STEP 5: Create database table:
+        - Click "SQL Editor" in left sidebar
+        - Click "New query"
+        - Copy the SQL from DATABASE_READY.md
+        - Paste and click "Run"
+
+STEP 6: Update .env.local with your credentials
+
+DONE! Test by booking an appointment.

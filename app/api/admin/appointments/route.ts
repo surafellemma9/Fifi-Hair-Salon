@@ -1,8 +1,8 @@
-import DatabaseManager from '@/lib/database'
+import UnifiedDatabaseManager from '@/lib/database-manager'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Initialize database manager
-const db = DatabaseManager.getInstance()
+// Initialize database manager (auto-switches between SQLite and Supabase)
+const db = UnifiedDatabaseManager.getInstance()
 
 export async function GET(request: NextRequest) {
 	try {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 		if (date) filters.date = date
 		if (status) filters.status = status
 		
-		const appointments = db.getAppointments(filters)
+		const appointments = await Promise.resolve(db.getAppointments(filters))
 		
 		return NextResponse.json({ 
 			appointments,
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 		}
 		
 		// Create new appointment using database
-		const result = db.createAppointment(appointmentData)
+		const result = await Promise.resolve(db.createAppointment(appointmentData))
 		
 		if (!result.success) {
 			return NextResponse.json(
@@ -90,7 +90,7 @@ export async function PUT(request: NextRequest) {
 		const updateData = await request.json()
 		
 		// Update appointment using database
-		const result = db.updateAppointment(id, updateData)
+		const result = await Promise.resolve(db.updateAppointment(id, updateData))
 		
 		if (!result.success) {
 			return NextResponse.json(
@@ -133,7 +133,7 @@ export async function PATCH(request: NextRequest) {
 		}
 
 		// Update appointment status using database
-		const result = db.updateAppointmentStatus(id, status)
+		const result = await Promise.resolve(db.updateAppointmentStatus(id, status))
 
 		if (!result.success) {
 			return NextResponse.json(
@@ -169,7 +169,7 @@ export async function DELETE(request: NextRequest) {
 		}
 		
 		// Delete appointment using database
-		const result = db.deleteAppointment(id)
+		const result = await Promise.resolve(db.deleteAppointment(id))
 		
 		if (!result.success) {
 			return NextResponse.json(
