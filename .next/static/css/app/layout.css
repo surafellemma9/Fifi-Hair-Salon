@@ -1037,6 +1037,9 @@ video {
 .min-h-screen {
   min-height: 100vh;
 }
+.min-h-\[32px\] {
+  min-height: 32px;
+}
 .w-12 {
   width: 3rem;
 }
@@ -1202,6 +1205,9 @@ video {
 .border {
   border-width: 1px;
 }
+.border-2 {
+  border-width: 2px;
+}
 .border-b {
   border-bottom-width: 1px;
 }
@@ -1250,6 +1256,9 @@ video {
 .border-red-500 {
   --tw-border-opacity: 1;
   border-color: rgb(239 68 68 / var(--tw-border-opacity));
+}
+.border-accent\/60 {
+  border-color: rgb(232 164 184 / 0.6);
 }
 .bg-accent {
   --tw-bg-opacity: 1;
@@ -1431,6 +1440,12 @@ video {
 .p-8 {
   padding: 2rem;
 }
+.p-2 {
+  padding: 0.5rem;
+}
+.p-3 {
+  padding: 0.75rem;
+}
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -1494,6 +1509,10 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 .pt-4 {
   padding-top: 1rem;
@@ -1819,6 +1838,10 @@ html, body {
   border-color: rgb(45 74 62 / 0.4);
 }
 
+.hover\:border-accent\/80:hover {
+  border-color: rgb(232 164 184 / 0.8);
+}
+
 .hover\:bg-accent-strong:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(214 122 149 / var(--tw-bg-opacity));
@@ -1929,6 +1952,11 @@ html, body {
   --tw-ring-color: rgb(232 164 184 / 0.2);
 }
 
+.focus\:border-accent:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(232 164 184 / var(--tw-border-opacity));
+}
+
 .focus-visible\:outline:focus-visible {
   outline-style: solid;
 }
@@ -1984,13 +2012,59 @@ html, body {
 
 @media (min-width: 640px) {
 
+  .sm\:mb-8 {
+    margin-bottom: 2rem;
+  }
+
+  .sm\:mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
   .sm\:columns-2 {
     -moz-columns: 2;
          columns: 2;
   }
 
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .sm\:flex-row {
     flex-direction: row;
+  }
+
+  .sm\:gap-6 {
+    gap: 1.5rem;
+  }
+
+  .sm\:gap-4 {
+    gap: 1rem;
+  }
+
+  .sm\:gap-1 {
+    gap: 0.25rem;
+  }
+
+  .sm\:p-8 {
+    padding: 2rem;
+  }
+
+  .sm\:p-4 {
+    padding: 1rem;
+  }
+
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
+
+  .sm\:py-16 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .sm\:text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 }
 
@@ -2093,6 +2167,22 @@ html, body {
 
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+
+  .lg\:items-center {
+    align-items: center;
+  }
+
+  .lg\:justify-between {
+    justify-content: space-between;
   }
 }
 

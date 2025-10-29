@@ -144,7 +144,7 @@ export default function AdminDashboard() {
 	}
 
 	return (
-		<main className="min-h-screen bg-gradient-to-br from-pink-light to-green-light p-4">
+		<main className="min-h-screen bg-gradient-to-br from-pink-light to-green-light p-2 sm:p-4">
 			<div className="container max-w-6xl mx-auto">
 				{/* Header */}
 				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20 mb-6 relative overflow-hidden">
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
 				)}
 
 				{/* Stats Cards */}
-				<div className="grid md:grid-cols-4 gap-6 mb-8">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
 					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
 						<h3 className="font-serif text-xl text-ink mb-2">Today's Appointments</h3>
 						<p className="text-3xl font-bold text-accent">{stats?.today || 0}</p>
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
 				</div>
 
 				{/* Filters */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20 mb-6">
+				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-soft ring-1 ring-accent/20 mb-4 sm:mb-6">
 					<h3 className="font-serif text-xl text-ink mb-4">Filters</h3>
 					<div className="flex flex-col sm:flex-row gap-4">
 						<div className="flex-1">
@@ -217,12 +217,12 @@ export default function AdminDashboard() {
 									type="date"
 									value={selectedDate}
 									onChange={(e) => setSelectedDate(e.target.value)}
-									className="flex-1 rounded-full border border-accent/30 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+									className="flex-1 rounded-full border-2 border-accent/60 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent bg-white text-ink hover:border-accent/80 focus:border-accent transition-colors"
 								/>
 								<button
 									type="button"
 									onClick={() => setSelectedDate('')}
-									className="px-4 py-2 rounded-full border border-accent/30 text-accent hover:bg-accent/10 transition-colors whitespace-nowrap"
+									className="px-4 py-2 rounded-full border-2 border-accent/60 text-accent hover:bg-accent/10 hover:border-accent/80 focus:border-accent transition-colors whitespace-nowrap bg-white"
 								>
 									Show All
 								</button>
@@ -233,7 +233,7 @@ export default function AdminDashboard() {
 							<select
 								value={selectedStatus}
 								onChange={(e) => setSelectedStatus(e.target.value)}
-								className="w-full rounded-full border border-accent/30 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+								className="w-full rounded-full border-2 border-accent/60 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent bg-white text-ink hover:border-accent/80 focus:border-accent transition-colors"
 							>
 								<option value="all">All Statuses</option>
 								<option value="scheduled">Scheduled</option>
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
 				</div>
 
 				{/* Appointments List */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
+				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-soft ring-1 ring-accent/20">
 					<h3 className="font-serif text-xl text-ink mb-4">
 						Appointments {selectedStatus !== 'all' ? `(${selectedStatus})` : ''} {selectedDate ? `for ${formatDate(selectedDate)}` : '(All dates)'}
 					</h3>
@@ -256,8 +256,8 @@ export default function AdminDashboard() {
 					) : (
 						<div className="space-y-4">
 							{appointments.map((appointment) => (
-								<div key={appointment.id} className="border border-accent/20 rounded-2xl p-4 hover:shadow-md transition-shadow">
-									<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+								<div key={appointment.id} className="border border-accent/20 rounded-2xl p-3 sm:p-4 hover:shadow-md transition-shadow">
+									<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
 										<div className="flex-1">
 											<div className="flex items-center gap-3 mb-2">
 												<h4 className="font-serif text-lg text-ink">
@@ -289,11 +289,11 @@ export default function AdminDashboard() {
 												<p className="text-xs text-muted">
 													Updated: {new Date(appointment.updatedAt).toLocaleDateString()}
 												</p>
-												<div className="mt-3 flex flex-wrap gap-2">
+												<div className="mt-3 flex flex-wrap gap-2 sm:gap-1">
 													{appointment.status !== 'completed' && (
 														<button
 															onClick={() => updateAppointmentStatus(appointment.id, 'completed')}
-															className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full hover:bg-green-200 transition-colors"
+															className="px-3 py-2 text-xs sm:text-xs bg-green-100 text-green-800 rounded-full hover:bg-green-200 transition-colors min-h-[32px]"
 														>
 															✓ Mark Complete
 														</button>
@@ -301,7 +301,7 @@ export default function AdminDashboard() {
 													{appointment.status !== 'scheduled' && (
 														<button
 															onClick={() => updateAppointmentStatus(appointment.id, 'scheduled')}
-															className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+															className="px-3 py-2 text-xs sm:text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors min-h-[32px]"
 														>
 															↩ Mark Pending
 														</button>
@@ -309,7 +309,7 @@ export default function AdminDashboard() {
 													{appointment.status !== 'cancelled' && (
 														<button
 															onClick={() => updateAppointmentStatus(appointment.id, 'cancelled')}
-															className="px-3 py-1 text-xs bg-red-100 text-red-800 rounded-full hover:bg-red-200 transition-colors"
+															className="px-3 py-2 text-xs sm:text-xs bg-red-100 text-red-800 rounded-full hover:bg-red-200 transition-colors min-h-[32px]"
 														>
 															✕ Cancel
 														</button>
@@ -317,7 +317,7 @@ export default function AdminDashboard() {
 													{appointment.status !== 'no-show' && (
 														<button
 															onClick={() => updateAppointmentStatus(appointment.id, 'no-show')}
-															className="px-3 py-1 text-xs bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition-colors"
+															className="px-3 py-2 text-xs sm:text-xs bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition-colors min-h-[32px]"
 														>
 															👻 No Show
 														</button>

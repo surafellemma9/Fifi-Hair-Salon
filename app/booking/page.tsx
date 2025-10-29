@@ -177,8 +177,8 @@ export default function BookingPage() {
 	}), [])
 
 	return (
-		<main className="container py-16 bg-gradient-to-br from-pink-light to-green-light min-h-screen">
-			<div className="max-w-4xl mx-auto">
+		<main className="container py-6 sm:py-16 bg-gradient-to-br from-pink-light to-green-light min-h-screen">
+			<div className="max-w-4xl mx-auto px-4">
 				{/* Back Button */}
 				<div className="mb-6">
 					<a 
@@ -203,7 +203,7 @@ export default function BookingPage() {
 						<noscript><a className="underline" href={CALENDLY}>Open booking</a></noscript>
 					</div>
 				) : (
-					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-soft ring-1 ring-accent/20 relative overflow-hidden">
+					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-8 shadow-soft ring-1 ring-accent/20 relative overflow-hidden">
 						{/* Decorative elements */}
 						<div className="absolute top-0 right-0 w-32 h-32 bg-green-accent/10 rounded-full blur-3xl"></div>
 						<div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/10 rounded-full blur-2xl"></div>
@@ -288,8 +288,8 @@ export default function BookingPage() {
 										name="service"
 										value={formData.service}
 										onChange={handleInputChange}
-										className={`w-full rounded-full border px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors ${
-											errors.service ? 'border-red-500' : 'border-accent/30 hover:border-accent/50'
+										className={`w-full rounded-full border-2 px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors bg-white text-ink ${
+											errors.service ? 'border-red-500' : 'border-accent/60 hover:border-accent/80 focus:border-accent'
 										}`}
 									>
 										<option value="">Select a service</option>
