@@ -1,124 +1,25 @@
+import DatabaseManager from '@/lib/database'
 import { NextRequest, NextResponse } from 'next/server'
 
-// In-memory storage for appointments (in production, use a database)
-let appointments: Array<{
-	id: string
-	firstName: string
-	lastName: string
-	service: string
-	date: string
-	time: string
-	phone: string
-	email: string
-	notes?: string
-	createdAt: string
-}> = []
-
-// Sample data for demonstration
-if (appointments.length === 0) {
-	const today = new Date().toISOString().split('T')[0]
-	const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-	const dayAfter = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-	
-	appointments = [
-		{
-			id: '1',
-			firstName: 'Sarah',
-			lastName: 'Johnson',
-			service: 'Box Braids',
-			date: today,
-			time: '10:00 AM',
-			phone: '(555) 123-4567',
-			email: 'sarah.j@email.com',
-			notes: 'Medium length, natural hair',
-			createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-		},
-		{
-			id: '2',
-			firstName: 'Maria',
-			lastName: 'Rodriguez',
-			service: 'Hair Straightening',
-			date: today,
-			time: '2:00 PM',
-			phone: '(555) 234-5678',
-			email: 'maria.r@email.com',
-			createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-		},
-		{
-			id: '3',
-			firstName: 'Aisha',
-			lastName: 'Williams',
-			service: 'Cornrows',
-			date: today,
-			time: '4:30 PM',
-			phone: '(555) 345-6789',
-			email: 'aisha.w@email.com',
-			notes: 'Want intricate pattern',
-			createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
-		},
-		{
-			id: '4',
-			firstName: 'Jennifer',
-			lastName: 'Brown',
-			service: 'Weave Sewing',
-			date: tomorrow,
-			time: '9:00 AM',
-			phone: '(555) 456-7890',
-			email: 'jennifer.b@email.com',
-			createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
-		},
-		{
-			id: '5',
-			firstName: 'Keisha',
-			lastName: 'Davis',
-			service: 'Dreadlocks',
-			date: tomorrow,
-			time: '1:00 PM',
-			phone: '(555) 567-8901',
-			email: 'keisha.d@email.com',
-			notes: 'First time getting dreadlocks',
-			createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString()
-		},
-		{
-			id: '6',
-			firstName: 'Lisa',
-			lastName: 'Garcia',
-			service: 'Wash & Set',
-			date: dayAfter,
-			time: '11:00 AM',
-			phone: '(555) 678-9012',
-			email: 'lisa.g@email.com',
-			createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString()
-		}
-	]
-}
+// Initialize database manager
+const db = DatabaseManager.getInstance()
 
 export async function GET(request: NextRequest) {
 	try {
-		// In a real application, you would:
-		// 1. Verify admin authentication
-		// 2. Query the database for appointments
-		// 3. Apply any filters or pagination
-		
 		const { searchParams } = new URL(request.url)
 		const date = searchParams.get('date')
+		const status = searchParams.get('status')
 		
-		let filteredAppointments = appointments
+		// Get appointments with optional filtering
+		const filters: { date?: string; status?: string } = {}
+		if (date) filters.date = date
+		if (status) filters.status = status
 		
-		if (date) {
-			filteredAppointments = appointments.filter(apt => apt.date === date)
-		}
-		
-		// Sort by date and time
-		filteredAppointments.sort((a, b) => {
-			const dateCompare = a.date.localeCompare(b.date)
-			if (dateCompare !== 0) return dateCompare
-			return a.time.localeCompare(b.time)
-		})
+		const appointments = db.getAppointments(filters)
 		
 		return NextResponse.json({ 
-			appointments: filteredAppointments,
-			total: filteredAppointments.length
+			appointments,
+			total: appointments.length
 		})
 
 	} catch (error) {
@@ -145,17 +46,23 @@ export async function POST(request: NextRequest) {
 			}
 		}
 		
-		// Create new appointment
-		const newAppointment = {
-			id: (appointments.length + 1).toString(),
-			...appointmentData,
-			createdAt: new Date().toISOString()
+		// Set default status if not provided
+		if (!appointmentData.status) {
+			appointmentData.status = 'scheduled'
 		}
 		
-		appointments.push(newAppointment)
+		// Create new appointment using database
+		const result = db.createAppointment(appointmentData)
+		
+		if (!result.success) {
+			return NextResponse.json(
+				{ error: result.errors?.join(', ') || 'Failed to create appointment' },
+				{ status: 400 }
+			)
+		}
 		
 		return NextResponse.json({ 
-			appointment: newAppointment,
+			appointment: result.appointment,
 			message: 'Appointment created successfully'
 		}, { status: 201 })
 
@@ -163,6 +70,122 @@ export async function POST(request: NextRequest) {
 		console.error('Error creating appointment:', error)
 		return NextResponse.json(
 			{ error: 'Failed to create appointment' },
+			{ status: 500 }
+		)
+	}
+}
+
+export async function PUT(request: NextRequest) {
+	try {
+		const { searchParams } = new URL(request.url)
+		const id = searchParams.get('id')
+		
+		if (!id) {
+			return NextResponse.json(
+				{ error: 'Appointment ID is required' },
+				{ status: 400 }
+			)
+		}
+		
+		const updateData = await request.json()
+		
+		// Update appointment using database
+		const result = db.updateAppointment(id, updateData)
+		
+		if (!result.success) {
+			return NextResponse.json(
+				{ error: result.errors?.join(', ') || 'Failed to update appointment' },
+				{ status: 400 }
+			)
+		}
+		
+		return NextResponse.json({ 
+			appointment: result.appointment,
+			message: 'Appointment updated successfully'
+		})
+
+	} catch (error) {
+		console.error('Error updating appointment:', error)
+		return NextResponse.json(
+			{ error: 'Failed to update appointment' },
+			{ status: 500 }
+		)
+	}
+}
+
+export async function PATCH(request: NextRequest) {
+	try {
+		const { id, status } = await request.json()
+
+		if (!id || !status) {
+			return NextResponse.json(
+				{ error: 'Appointment ID and status are required' },
+				{ status: 400 }
+			)
+		}
+
+		const validStatuses = ['scheduled', 'completed', 'cancelled', 'no-show']
+		if (!validStatuses.includes(status)) {
+			return NextResponse.json(
+				{ error: 'Invalid status. Must be one of: scheduled, completed, cancelled, no-show' },
+				{ status: 400 }
+			)
+		}
+
+		// Update appointment status using database
+		const result = db.updateAppointmentStatus(id, status)
+
+		if (!result.success) {
+			return NextResponse.json(
+				{ error: result.errors?.join(', ') || 'Failed to update appointment status' },
+				{ status: 400 }
+			)
+		}
+
+		return NextResponse.json({
+			appointment: result.appointment,
+			message: 'Appointment status updated successfully'
+		})
+
+	} catch (error) {
+		console.error('Error updating appointment status:', error)
+		return NextResponse.json(
+			{ error: 'Failed to update appointment status' },
+			{ status: 500 }
+		)
+	}
+}
+
+export async function DELETE(request: NextRequest) {
+	try {
+		const { searchParams } = new URL(request.url)
+		const id = searchParams.get('id')
+		
+		if (!id) {
+			return NextResponse.json(
+				{ error: 'Appointment ID is required' },
+				{ status: 400 }
+			)
+		}
+		
+		// Delete appointment using database
+		const result = db.deleteAppointment(id)
+		
+		if (!result.success) {
+			return NextResponse.json(
+				{ error: result.errors?.join(', ') || 'Failed to delete appointment' },
+				{ status: 400 }
+			)
+		}
+		
+		return NextResponse.json({ 
+			message: 'Appointment deleted successfully'
+		})
+
+	} catch (error) {
+		console.error('Error deleting appointment:', error)
+		return NextResponse.json(
+			{ error: 'Failed to delete appointment' },
 			{ status: 500 }
 		)
 	}

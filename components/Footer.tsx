@@ -28,12 +28,12 @@ export default function Footer() {
 				</nav>
 				<div className="flex items-center gap-4">
 					<p className="text-xs text-ink/60">{t.footer.copyright}</p>
-					<a 
-						href="/admin-login" 
-						className="text-xs text-ink/40 hover:text-ink/60 transition-colors px-2 py-1 rounded border border-ink/20 hover:border-ink/40"
-					>
-						Admin
-					</a>
+				<a 
+					href="/admin-dashboard" 
+					className="text-xs text-ink/40 hover:text-ink/60 transition-colors px-2 py-1 rounded border border-ink/20 hover:border-ink/40"
+				>
+					Admin
+				</a>
 				</div>
 			</div>
 		</div>

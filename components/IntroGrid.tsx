@@ -14,12 +14,12 @@ export default function IntroGrid() {
 			
 			<div className="container max-w-7xl grid md:grid-cols-4 gap-4 md:gap-6 items-stretch relative z-10">
 				{[
-					{src: 'intro-braids.jpg', alt: 'Black woman with beautiful cornrows being styled by professional stylist'},
+					{src: 'salon-professional.jpg', alt: 'Professional hair salon with stylist working on client\'s hair, showcasing expert care and natural beauty'},
 					{src: 'intro-silk-press.jpg', alt: 'Black woman with sleek straightened hair being styled with precision'},
 					{src: 'intro-afro.jpg', alt: 'Black woman with voluminous natural afro being styled with round brush'}
 				].map((img, i) => (
 					<div key={i} className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(232,164,184,0.15)] break-inside-avoid group hover:shadow-[0_12px_32px_rgba(232,164,184,0.25)] transition-all duration-300">
-						<Image src={`/images/intro/${img.src}`} alt={img.alt} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-300" priority={i===0} />
+						<Image src={img.src === 'salon-professional.jpg' ? `/images/${img.src}` : `/images/intro/${img.src}`} alt={img.alt} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-300" priority={i===0} />
 						<div className="absolute inset-0 bg-gradient-to-t from-accent/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 					</div>
 				))}

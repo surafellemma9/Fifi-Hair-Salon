@@ -2,36 +2,41 @@
 
 import { useTranslation } from '@/contexts/TranslationContext'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function AdminLoginPage() {
 	const { t } = useTranslation()
+	const router = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
 	const [message, setMessage] = useState('')
 	const [error, setError] = useState('')
+	const [password, setPassword] = useState('')
 
-	const handleSendOTP = async () => {
+	const handleLogin = async (e: React.FormEvent) => {
+		e.preventDefault()
 		setIsLoading(true)
 		setError('')
 		setMessage('')
 
 		try {
-			const response = await fetch('/api/admin/send-email-otp', {
+			const response = await fetch('/api/admin/login', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify({ password }),
 			})
 
 			const data = await response.json()
 
 			if (response.ok) {
-				setMessage(`OTP generated! Check terminal for code: ${data.devOtp}`)
-				// Redirect to OTP verification page after 3 seconds
+				setMessage('Login successful! Redirecting to dashboard...')
+				// Redirect to admin dashboard after 1 second
 				setTimeout(() => {
-					window.location.href = '/admin-verify'
-				}, 3000)
+					router.push('/admin-dashboard')
+				}, 1000)
 			} else {
-				setError(data.error || 'Failed to generate OTP. Please try again.')
+				setError(data.error || 'Login failed. Please try again.')
 			}
 		} catch (err) {
 			setError('Network error. Please try again.')
@@ -50,19 +55,12 @@ export default function AdminLoginPage() {
 				<div className="relative z-10">
 					<div className="text-center mb-8">
 						<h1 className="font-serif text-3xl text-ink mb-2">Admin Access</h1>
-						<p className="text-muted">Enter your credentials to access the admin dashboard</p>
+						<p className="text-muted">Enter your password to access the admin dashboard</p>
 					</div>
 
 					{message && (
 						<div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl">
 							<p className="text-green-800 text-center font-medium">{message}</p>
-							{message.includes('Check terminal') && (
-								<div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-									<p className="text-blue-800 text-sm text-center">
-										💡 <strong>Development Mode:</strong> Check your terminal/console for the OTP code
-									</p>
-								</div>
-							)}
 						</div>
 					)}
 
@@ -72,19 +70,30 @@ export default function AdminLoginPage() {
 						</div>
 					)}
 
-					<div className="space-y-6">
-						<div className="text-center">
-							<p className="text-sm text-muted mb-4">
-								Click the button below to generate a 5-digit OTP for admin access.
-							</p>
-							<button
-								onClick={handleSendOTP}
-								disabled={isLoading}
-								className="w-full rounded-full px-8 py-4 text-lg font-medium shadow-sm bg-gradient-to-r from-accent to-green-accent hover:from-accent-strong hover:to-green-accent/80 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
-							>
-								{isLoading ? 'Generating OTP...' : 'Generate OTP Code'}
-							</button>
+					<form onSubmit={handleLogin} className="space-y-6">
+						<div>
+							<label htmlFor="password" className="block text-sm font-medium text-ink mb-2">
+								Admin Password
+							</label>
+							<input
+								id="password"
+								type="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								className="w-full rounded-full border border-accent/30 px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-colors hover:border-accent/50"
+								placeholder="Enter admin password"
+								required
+							/>
 						</div>
+
+						<button
+							type="submit"
+							disabled={isLoading || !password}
+							className="w-full rounded-full px-8 py-4 text-lg font-medium shadow-sm bg-gradient-to-r from-accent to-green-accent hover:from-accent-strong hover:to-green-accent/80 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
+						>
+							{isLoading ? 'Signing In...' : 'Sign In to Admin'}
+						</button>
+					</form>
 
 						<div className="text-center">
 							<a 

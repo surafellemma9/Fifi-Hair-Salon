@@ -32,7 +32,7 @@ export default function Hero() {
 				</div>
 				<div className="relative">
 					<div className="absolute -inset-4 bg-gradient-to-br from-accent/20 to-green-accent/20 rounded-3xl blur-xl"></div>
-					<Image src="/images/hero/hero-portrait.jpg" alt="Black woman with beautiful natural hair being styled with professional blow dryer" width={960} height={1200} priority className="aspect-[4/5] rounded-3xl object-cover shadow-lg relative z-10" />
+					<Image src="/images/salon-professional.jpg" alt="Professional hair salon with stylist working on client's hair, showcasing expert care and natural beauty" width={960} height={1200} priority className="aspect-[4/5] rounded-3xl object-cover shadow-lg relative z-10" />
 				</div>
 			</div>
 		</section>

@@ -179,6 +179,19 @@ export default function BookingPage() {
 	return (
 		<main className="container py-16 bg-gradient-to-br from-pink-light to-green-light min-h-screen">
 			<div className="max-w-4xl mx-auto">
+				{/* Back Button */}
+				<div className="mb-6">
+					<a 
+						href="/" 
+						className="inline-flex items-center gap-2 text-accent hover:text-accent-strong transition-colors"
+					>
+						<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Back to Home
+					</a>
+				</div>
+				
 				<div className="text-center mb-8">
 					<h1 className="font-serif text-4xl md:text-5xl text-ink">{t.booking.title}</h1>
 					<p className="mt-4 text-lg text-muted">{t.booking.subtitle}</p>
@@ -361,10 +374,16 @@ export default function BookingPage() {
 									{submitted ? t.booking.form.submitted : t.booking.form.submit}
 								</button>
 								{submitted && (
-									<div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-2xl">
-										<p className="text-green-800 text-center">
-											🎉 {t.booking.form.successMessage}
-										</p>
+									<div className="mt-4 p-6 bg-green-50 border border-green-200 rounded-2xl">
+										<div className="text-center">
+											<div className="text-4xl mb-2">🎉</div>
+											<p className="text-green-800 text-lg font-medium mb-2">
+												{t.booking.form.successMessage}
+											</p>
+											<p className="text-green-700 text-sm">
+												Your appointment has been successfully booked and will appear in the admin dashboard.
+											</p>
+										</div>
 									</div>
 								)}
 							</div>

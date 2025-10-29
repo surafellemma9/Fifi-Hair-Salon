@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/admin-dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/admin-dashboard/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,20 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/booking/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/booking/page.js"
-    ],
-    "/admin-login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-login/page.js"
-    ],
-    "/admin-verify/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-verify/page.js"
+      "static/chunks/app/page.js"
     ]
   }
 }

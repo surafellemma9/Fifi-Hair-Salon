@@ -13,42 +13,59 @@ interface Appointment {
 	phone: string
 	email: string
 	notes?: string
+	status: 'scheduled' | 'completed' | 'cancelled' | 'no-show'
 	createdAt: string
+	updatedAt: string
+}
+
+interface Stats {
+	total: number
+	today: number
+	thisWeek: number
+	byStatus: Record<string, number>
+	totalRevenue: number
+	todayRevenue: number
+	thisWeekRevenue: number
+	pendingRevenue: number
+	todayPendingRevenue: number
+	thisWeekPendingRevenue: number
 }
 
 export default function AdminDashboard() {
 	const router = useRouter()
 	const [appointments, setAppointments] = useState<Appointment[]>([])
+	const [stats, setStats] = useState<Stats | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState('')
-	const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
+	const [selectedDate, setSelectedDate] = useState('')
+	const [selectedStatus, setSelectedStatus] = useState<string>('all')
 
 	useEffect(() => {
-		// Check if admin is authenticated
-		const isAuthenticated = localStorage.getItem('admin_authenticated')
-		const loginTime = localStorage.getItem('admin_login_time')
-		
-		if (!isAuthenticated || !loginTime) {
-			router.push('/admin-login')
-			return
-		}
-
-		// Check if session is expired (24 hours)
-		const now = Date.now()
-		const sessionTime = parseInt(loginTime)
-		if (now - sessionTime > 24 * 60 * 60 * 1000) {
-			localStorage.removeItem('admin_authenticated')
-			localStorage.removeItem('admin_login_time')
-			router.push('/admin-login')
-			return
-		}
-
 		fetchAppointments()
-	}, [router])
+		fetchStats()
+	}, [])
+
+	useEffect(() => {
+		fetchAppointments()
+	}, [selectedDate, selectedStatus])
+
+	// Auto-refresh every 30 seconds to show new appointments
+	useEffect(() => {
+		const interval = setInterval(() => {
+			fetchAppointments()
+			fetchStats()
+		}, 30000) // 30 seconds
+
+		return () => clearInterval(interval)
+	}, [selectedDate, selectedStatus])
 
 	const fetchAppointments = async () => {
 		try {
-			const response = await fetch('/api/admin/appointments')
+			const params = new URLSearchParams()
+			if (selectedDate) params.append('date', selectedDate)
+			if (selectedStatus !== 'all') params.append('status', selectedStatus)
+			
+			const response = await fetch(`/api/admin/appointments?${params.toString()}`)
 			const data = await response.json()
 
 			if (response.ok) {
@@ -63,20 +80,46 @@ export default function AdminDashboard() {
 		}
 	}
 
+	const fetchStats = async () => {
+		try {
+			const response = await fetch('/api/admin/stats')
+			const data = await response.json()
+
+			if (response.ok) {
+				setStats(data.stats)
+			}
+		} catch (err) {
+			console.error('Failed to fetch stats:', err)
+		}
+	}
+
 	const handleLogout = () => {
-		localStorage.removeItem('admin_authenticated')
-		localStorage.removeItem('admin_login_time')
-		router.push('/admin-login')
+		router.push('/')
 	}
 
-	const getTodaysAppointments = () => {
-		const today = new Date().toISOString().split('T')[0]
-		return appointments.filter(apt => apt.date === today)
+	const updateAppointmentStatus = async (id: string, status: 'scheduled' | 'completed' | 'cancelled' | 'no-show') => {
+		try {
+			const response = await fetch('/api/admin/appointments', {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ id, status }),
+			})
+
+			if (response.ok) {
+				// Refresh appointments and stats
+				fetchAppointments()
+				fetchStats()
+			} else {
+				const error = await response.json()
+				setError(error.error || 'Failed to update appointment status')
+			}
+		} catch (err) {
+			setError('Network error. Please try again.')
+		}
 	}
 
-	const getAppointmentsByDate = (date: string) => {
-		return appointments.filter(apt => apt.date === date)
-	}
 
 	const formatDate = (dateString: string) => {
 		return new Date(dateString).toLocaleDateString('en-US', {
@@ -87,8 +130,6 @@ export default function AdminDashboard() {
 		})
 	}
 
-	const todaysAppointments = getTodaysAppointments()
-	const selectedDateAppointments = getAppointmentsByDate(selectedDate)
 
 	if (isLoading) {
 		return (
@@ -114,12 +155,23 @@ export default function AdminDashboard() {
 							<h1 className="font-serif text-3xl text-ink mb-2">Admin Dashboard</h1>
 							<p className="text-muted">Manage your salon appointments</p>
 						</div>
-						<button
-							onClick={handleLogout}
-							className="px-4 py-2 rounded-full border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
-						>
-							Logout
-						</button>
+						<div className="flex gap-3">
+							<button
+								onClick={() => {
+									fetchAppointments()
+									fetchStats()
+								}}
+								className="px-4 py-2 rounded-full border border-green-accent/30 text-green-accent hover:bg-green-accent/10 transition-colors"
+							>
+								🔄 Refresh
+							</button>
+							<button
+								onClick={handleLogout}
+								className="px-4 py-2 rounded-full border border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+							>
+								Back to Home
+							</button>
+						</div>
 					</div>
 				</div>
 
@@ -130,60 +182,96 @@ export default function AdminDashboard() {
 				)}
 
 				{/* Stats Cards */}
-				<div className="grid md:grid-cols-3 gap-6 mb-8">
+				<div className="grid md:grid-cols-4 gap-6 mb-8">
 					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
 						<h3 className="font-serif text-xl text-ink mb-2">Today's Appointments</h3>
-						<p className="text-3xl font-bold text-accent">{todaysAppointments.length}</p>
+						<p className="text-3xl font-bold text-accent">{stats?.today || 0}</p>
 						<p className="text-sm text-muted">{formatDate(new Date().toISOString().split('T')[0])}</p>
 					</div>
 					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
-						<h3 className="font-serif text-xl text-ink mb-2">Total Appointments</h3>
-						<p className="text-3xl font-bold text-green-accent">{appointments.length}</p>
-						<p className="text-sm text-muted">All time</p>
+						<h3 className="font-serif text-xl text-ink mb-2">Completed Revenue</h3>
+						<p className="text-3xl font-bold text-green-accent">${(stats?.totalRevenue || 0).toLocaleString()}</p>
+						<p className="text-sm text-muted">From completed services</p>
 					</div>
 					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
-						<h3 className="font-serif text-xl text-ink mb-2">This Week</h3>
-						<p className="text-3xl font-bold text-green-dark">
-							{appointments.filter(apt => {
-								const aptDate = new Date(apt.date)
-								const now = new Date()
-								const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-								return aptDate >= weekAgo && aptDate <= now
-							}).length}
-						</p>
-						<p className="text-sm text-muted">Last 7 days</p>
+						<h3 className="font-serif text-xl text-ink mb-2">Pending Revenue</h3>
+						<p className="text-3xl font-bold text-orange-500">${(stats?.pendingRevenue || 0).toLocaleString()}</p>
+						<p className="text-sm text-muted">From scheduled appointments</p>
+					</div>
+					<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
+						<h3 className="font-serif text-xl text-ink mb-2">This Week's Revenue</h3>
+						<p className="text-3xl font-bold text-green-dark">${(stats?.thisWeekRevenue || 0).toLocaleString()}</p>
+						<p className="text-sm text-muted">Completed this week</p>
 					</div>
 				</div>
 
-				{/* Date Filter */}
+				{/* Filters */}
 				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20 mb-6">
-					<h3 className="font-serif text-xl text-ink mb-4">Filter by Date</h3>
-					<input
-						type="date"
-						value={selectedDate}
-						onChange={(e) => setSelectedDate(e.target.value)}
-						className="rounded-full border border-accent/30 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-					/>
+					<h3 className="font-serif text-xl text-ink mb-4">Filters</h3>
+					<div className="flex flex-col sm:flex-row gap-4">
+						<div className="flex-1">
+							<label className="block text-sm font-medium text-ink mb-2">Date</label>
+							<div className="flex gap-2">
+								<input
+									type="date"
+									value={selectedDate}
+									onChange={(e) => setSelectedDate(e.target.value)}
+									className="flex-1 rounded-full border border-accent/30 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+								/>
+								<button
+									type="button"
+									onClick={() => setSelectedDate('')}
+									className="px-4 py-2 rounded-full border border-accent/30 text-accent hover:bg-accent/10 transition-colors whitespace-nowrap"
+								>
+									Show All
+								</button>
+							</div>
+						</div>
+						<div className="flex-1">
+							<label className="block text-sm font-medium text-ink mb-2">Status</label>
+							<select
+								value={selectedStatus}
+								onChange={(e) => setSelectedStatus(e.target.value)}
+								className="w-full rounded-full border border-accent/30 px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+							>
+								<option value="all">All Statuses</option>
+								<option value="scheduled">Scheduled</option>
+								<option value="completed">Completed</option>
+								<option value="cancelled">Cancelled</option>
+								<option value="no-show">No Show</option>
+							</select>
+						</div>
+					</div>
 				</div>
 
 				{/* Appointments List */}
 				<div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft ring-1 ring-accent/20">
 					<h3 className="font-serif text-xl text-ink mb-4">
-						Appointments for {formatDate(selectedDate)}
+						Appointments {selectedStatus !== 'all' ? `(${selectedStatus})` : ''} {selectedDate ? `for ${formatDate(selectedDate)}` : '(All dates)'}
 					</h3>
 					
-					{selectedDateAppointments.length === 0 ? (
-						<p className="text-muted text-center py-8">No appointments scheduled for this date.</p>
+					{appointments.length === 0 ? (
+						<p className="text-muted text-center py-8">No appointments found with the current filters.</p>
 					) : (
 						<div className="space-y-4">
-							{selectedDateAppointments.map((appointment) => (
+							{appointments.map((appointment) => (
 								<div key={appointment.id} className="border border-accent/20 rounded-2xl p-4 hover:shadow-md transition-shadow">
 									<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 										<div className="flex-1">
-											<h4 className="font-serif text-lg text-ink">
-												{appointment.firstName} {appointment.lastName}
-											</h4>
-											<p className="text-muted">{appointment.service}</p>
+											<div className="flex items-center gap-3 mb-2">
+												<h4 className="font-serif text-lg text-ink">
+													{appointment.firstName} {appointment.lastName}
+												</h4>
+												<span className={`px-3 py-1 rounded-full text-xs font-medium ${
+													appointment.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+													appointment.status === 'completed' ? 'bg-green-100 text-green-800' :
+													appointment.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+													'bg-gray-100 text-gray-800'
+												}`}>
+													{appointment.status.replace('-', ' ').toUpperCase()}
+												</span>
+											</div>
+											<p className="text-muted">{appointment.service} • ${appointment.servicePrice}</p>
 											<p className="text-sm text-muted">
 												{appointment.time} • {appointment.phone} • {appointment.email}
 											</p>
@@ -193,11 +281,48 @@ export default function AdminDashboard() {
 												</p>
 											)}
 										</div>
-										<div className="text-right">
-											<p className="text-sm text-muted">
-												Booked: {new Date(appointment.createdAt).toLocaleDateString()}
-											</p>
-										</div>
+											<div className="text-right">
+												<p className="text-sm text-muted">
+													Booked: {new Date(appointment.createdAt).toLocaleDateString()}
+												</p>
+												<p className="text-xs text-muted">
+													Updated: {new Date(appointment.updatedAt).toLocaleDateString()}
+												</p>
+												<div className="mt-3 flex flex-wrap gap-2">
+													{appointment.status !== 'completed' && (
+														<button
+															onClick={() => updateAppointmentStatus(appointment.id, 'completed')}
+															className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full hover:bg-green-200 transition-colors"
+														>
+															✓ Mark Complete
+														</button>
+													)}
+													{appointment.status !== 'scheduled' && (
+														<button
+															onClick={() => updateAppointmentStatus(appointment.id, 'scheduled')}
+															className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+														>
+															↩ Mark Pending
+														</button>
+													)}
+													{appointment.status !== 'cancelled' && (
+														<button
+															onClick={() => updateAppointmentStatus(appointment.id, 'cancelled')}
+															className="px-3 py-1 text-xs bg-red-100 text-red-800 rounded-full hover:bg-red-200 transition-colors"
+														>
+															✕ Cancel
+														</button>
+													)}
+													{appointment.status !== 'no-show' && (
+														<button
+															onClick={() => updateAppointmentStatus(appointment.id, 'no-show')}
+															className="px-3 py-1 text-xs bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition-colors"
+														>
+															👻 No Show
+														</button>
+													)}
+												</div>
+											</div>
 									</div>
 								</div>
 							))}
